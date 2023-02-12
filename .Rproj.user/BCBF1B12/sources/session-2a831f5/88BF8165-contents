@@ -39,13 +39,17 @@ if(!require("tidyverse")) install.packages("tidyverse")
 ## Import Data ####
 dat <-readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-18/food_consumption.csv')
 
-## Set colour palatte
+## Set colour palette
 #A colour blind friendly palette (with black)
 
 cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 
 ```
 # Food Consumption Analysis
+
+## Shiny App
+
+The graphs can all be viewed on [this **shiny app**](https://seosamh.shinyapps.io/food_consumption/).
 
 ## Introduction
 
@@ -304,7 +308,6 @@ tmap_arrange(c, w, nrow = 2, sync = TRUE)
 ```
 
 \
-
 In order to determine if there is a global pattern to CO2 emissions per person this information was plotted on a map (figure 5). This shows an interesting pattern whereby the lowest carbon footprint appears to be in Africa, Asia and Eastern South America with the highest emissions coming from Europe and North America. Beneath this map is included a measure of wealth of countries and this appears to follow a very similar pattern apart from Argentina which has a far higher level of emissions than other countries of a similar level of wealth.
 
 
@@ -389,7 +392,6 @@ co2_dat <- dat %>%
 ```
 
 \
-
 So far we have seen that there is a huge variation in countries carbon footprint from these selected sources of protein. This effect is down to amount of consumption as well as what food types countries are eating. One current global trend is to convert to veganism which involves forgoing any animal protein. 
 
 In order to explore if this is a potentially beneficial move, the global emissions from transferring every KG of animal protein consumed globally to a plant protein source was calculated and shown in Figure 6. This graphic shows that there is a massive potential to reduce the emissions from global food consumption. A complete removal of animal protein is probably not a sensible move but this graphic does provide a useful starting point in the discussion about reducing our meat consumption especially in the developed world.
@@ -398,22 +400,20 @@ In order to explore if this is a potentially beneficial move, the global emissio
 
 ## Bad Graph
 
-Figure 7 shows how this  graph is originally presented as a part of a figure in the paper by Xie et al (2022). I have appraised graph (b) below but the way in which it is included in the paper surrounded by so much other information and relatively small makes interpretation difficult. 
-
-```{r out.width ="50%", fig.cap="How the bad graph is orginally presented by Xie et al (2022)"}
+```{r out.width ="50%", fig.cap="How the bad graph is orginally presented by Xie et al (2022)", fig.align='center'}
 
 knitr::include_graphics(here::here("images/Bad graph.jpg"))
 
 ```
 
 \
+Figure 7 shows how this  graph is originally presented as a part of a figure in the paper by Xie et al (2022). I have appraised graph (b) below but the way in which it is included in the paper surrounded by so much other information and relatively small makes interpretation difficult. 
 
 ```{r out.width = "100%", fig.cap = "The effect of different concentrations of LPS on bovine hepatocytes by measuring the relative expression of different inflammatory genes to a non-inflammatory gene (GAPDH) from Xie et al (2022)"}
 knitr::include_graphics(here::here("images/Bad graph - 2.jpg"))
 ```
 
 \
-
 This visualisation is generally quite difficult to make any inferences from as it is very cluttered. The points outlined below make the message of the graph very difficult to interpret. As a standalone graph it lacks alot of key information, such as a title (annotation D), although an equivalent to this is included in the figure caption. Of more significance is the lack of a legend title (annotation F) as although we can infer that this is probably LPS concentration from the figure title it is possible that it could relate to something else. The legend (annotation F) also suffers from a poor choice of colour scale as although it is consistently used across x axis categories the colours are so similar it makes comparing the same concentration across categories very difficult. Either direct labeling of the points or a better choice of colour scale would have made this much better. The x axis is missing a title (annotation C) and so although we can tell there are different categories it isn't clear what these are categories of. The y axis of this graph (annotation A) although labeled, has two major flaws as it is split and so jumps from 2 to 80 and has vastly different scales for the higher numbers. This makes interpretation very difficult and is misleading as to the magnitude of differences between groups. Finally the labeling of P values (annotation B) adds alot of clutter to the graph and a more minimal way of labeling such as letters to show significance levels would improve this graphs readability.
 
 ## Good Graph
@@ -423,8 +423,6 @@ knitr::include_graphics(here::here("images/Good graph.jpg"))
 ```
 
 \
-
-
 Figure 9 manages to convey the information required in a efficient manor although the purpose of the graph isn't clear as it is lacking a title but this information is included in the figure caption. The choice of a stacked bar is appropriate as it is showing the prevalence of categories that will add upto 100% The axis on this graph are very clear with the x axis (annotation E) having good sensible breaks and the y axis has good groupings of variables for comparison (annotation A) and the rotation of the graph allows of y axis categories (annotation B) to be easily read. The colour choice of the stacked bars (annotation C) allows for clear differentiation between categories. With the direct labeling (annotation D) of the sections of the bar allow for the exact size of each segment to be read without relying on the reader inference as this can be difficult to judge with a stacked bar chart. I especially like to attention to detail with the changing of colour of the text (annotation F) depending on the background to ensure the text remains clear as the consistent approach to decimalisation. 
 
 # References

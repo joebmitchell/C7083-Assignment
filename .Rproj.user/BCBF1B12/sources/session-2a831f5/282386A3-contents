@@ -2,14 +2,15 @@ dotplot_fn <- function(x){
   cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 co2 <- x %>% 
   group_by(food_category) %>% 
-  group_by(food_category) %>% 
   mutate(co2_per_kg = co2_emmission/consumption) %>% 
-  summarise(co2_per_kg = round(mean(co2_per_kg, na.rm = TRUE), 2)) %>% # Calculate co2 per kg eaten by country
+  summarise(co2_per_kg = round(mean(co2_per_kg, na.rm = TRUE), 2),# Calculate co2 per kg eaten by country
+            total_eaten = sum(consumption)) %>% # sum total kg eaten
+  mutate(total_co2 = co2_per_kg * total_eaten) %>% # calculate total co2 by country
   arrange(co2_per_kg) %>% 
   #Create factor levels dividing food groups into plant or animal origin
   mutate(food_category = as.factor(food_category),
-         food_group = c(0,0,1,1,0,1,1,0,1,1,1),
-         food_group = factor(food_group, labels = c('Plant Protein', 'Animal Protein')))
+        food_group = c(0,0,1,0,1,1,0,1,1,1,1),
+        food_group = factor(food_group, labels = c('Plant Protein', 'Animal Protein')))
   
 my_cols <- cbbPalette[c(2,6)] # set colours from palate to be used in graph
 
