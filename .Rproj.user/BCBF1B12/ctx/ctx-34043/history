@@ -1,0 +1,512 @@
+mutate(total_co2_prop_animal = total_co2_gp / (total_co2_gp +lag(total_co2_gp)),
+total_co2_prop_plant =  1 - lead(total_co2_prop_animal),
+total_co2_prop = max(c(total_co2_prop_animal, total_co2_prop_plant))
+}
+dat <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-18/food_consumption.csv') %>%
+group_by(country) %>%
+mutate(total = sum(co2_emmission),
+proportion = co2_emmission/total) %>%
+mutate(food_category = as.factor(food_category),
+food_group = c(1,1,1,1,1,1,1,0,0,0,0),
+food_group = factor(food_group, labels = c('Plant Protein', 'Animal Protein'))) %>%
+mutate(country = replace(country, country == 'Congo', 'Democratic Republic of the Congo'),
+country = replace(country, country == 'Gambia', 'The Gambia'),
+country = replace(country, country == 'Macedonia', 'North Macedonia'),
+country = replace(country, country == 'Russia', 'Russian Federation'),
+country = replace(country, country == 'South Korea', 'Republic of Korea'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Taiwan. ROC', 'Taiwan'),
+country = replace(country, country == 'USA', 'United States'),) %>%
+rename("NAME_LONG" = "country") %>%
+group_by(NAME_LONG, food_group) %>%
+summarise(total_co2_gp = sum(co2_emmission),
+total_con_gp = sum(consumption),) %>%
+mutate(total_co2_prop_animal = total_co2_gp / (total_co2_gp +lag(total_co2_gp)),
+total_co2_prop_plant =  1 - lead(total_co2_prop_animal),
+total_co2_prop = max(c(total_co2_prop_animal, total_co2_prop_plant)))
+dat <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-18/food_consumption.csv') %>%
+group_by(country) %>%
+mutate(total = sum(co2_emmission),
+proportion = co2_emmission/total) %>%
+mutate(food_category = as.factor(food_category),
+food_group = c(1,1,1,1,1,1,1,0,0,0,0),
+food_group = factor(food_group, labels = c('Plant Protein', 'Animal Protein'))) %>%
+mutate(country = replace(country, country == 'Congo', 'Democratic Republic of the Congo'),
+country = replace(country, country == 'Gambia', 'The Gambia'),
+country = replace(country, country == 'Macedonia', 'North Macedonia'),
+country = replace(country, country == 'Russia', 'Russian Federation'),
+country = replace(country, country == 'South Korea', 'Republic of Korea'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Taiwan. ROC', 'Taiwan'),
+country = replace(country, country == 'USA', 'United States'),) %>%
+rename("NAME_LONG" = "country") %>%
+group_by(NAME_LONG, food_group) %>%
+summarise(total_co2_gp = sum(co2_emmission),
+total_con_gp = sum(consumption),) %>%
+mutate(total_co2_prop_animal = total_co2_gp / (total_co2_gp +lag(total_co2_gp)),
+total_co2_prop_plant =  1 - lead(total_co2_prop_animal),
+total_co2_prop = max(c(total_co2_prop_animal, total_co2_prop_plant))) %>%
+pivot_wider(names_from = food_group, values_from = total_co2_gp)
+dat <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-18/food_consumption.csv') %>%
+group_by(country) %>%
+mutate(total = sum(co2_emmission),
+proportion = co2_emmission/total) %>%
+mutate(food_category = as.factor(food_category),
+food_group = c(1,1,1,1,1,1,1,0,0,0,0),
+food_group = factor(food_group, labels = c('Plant Protein', 'Animal Protein'))) %>%
+mutate(country = replace(country, country == 'Congo', 'Democratic Republic of the Congo'),
+country = replace(country, country == 'Gambia', 'The Gambia'),
+country = replace(country, country == 'Macedonia', 'North Macedonia'),
+country = replace(country, country == 'Russia', 'Russian Federation'),
+country = replace(country, country == 'South Korea', 'Republic of Korea'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Taiwan. ROC', 'Taiwan'),
+country = replace(country, country == 'USA', 'United States'),) %>%
+rename("NAME_LONG" = "country") %>%
+group_by(NAME_LONG, food_group) %>%
+# summarise(total_co2_gp = sum(co2_emmission),
+#           total_con_gp = sum(consumption),) %>%
+mutate(total_co2_prop_animal = total_co2_gp / (total_co2_gp +lag(total_co2_gp)),
+total_co2_prop_plant =  1 - lead(total_co2_prop_animal)) %>%
+pivot_wider(names_from = food_group, values_from = total_co2_gp)
+dat <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-18/food_consumption.csv') %>%
+group_by(country) %>%
+mutate(total = sum(co2_emmission),
+proportion = co2_emmission/total) %>%
+mutate(food_category = as.factor(food_category),
+food_group = c(1,1,1,1,1,1,1,0,0,0,0),
+food_group = factor(food_group, labels = c('Plant Protein', 'Animal Protein'))) %>%
+mutate(country = replace(country, country == 'Congo', 'Democratic Republic of the Congo'),
+country = replace(country, country == 'Gambia', 'The Gambia'),
+country = replace(country, country == 'Macedonia', 'North Macedonia'),
+country = replace(country, country == 'Russia', 'Russian Federation'),
+country = replace(country, country == 'South Korea', 'Republic of Korea'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Taiwan. ROC', 'Taiwan'),
+country = replace(country, country == 'USA', 'United States'),) %>%
+rename("NAME_LONG" = "country") %>%
+group_by(NAME_LONG, food_group) %>%
+# summarise(total_co2_gp = sum(co2_emmission),
+#           total_con_gp = sum(consumption),) %>%
+# mutate(total_co2_prop_animal = total_co2_gp / (total_co2_gp +lag(total_co2_gp)),
+#        total_co2_prop_plant =  1 - lead(total_co2_prop_animal)) %>%
+pivot_wider(names_from = food_group, values_from = total_co2_gp)
+dat <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-18/food_consumption.csv') %>%
+group_by(country) %>%
+mutate(total = sum(co2_emmission),
+proportion = co2_emmission/total) %>%
+mutate(food_category = as.factor(food_category),
+food_group = c(1,1,1,1,1,1,1,0,0,0,0),
+food_group = factor(food_group, labels = c('Plant Protein', 'Animal Protein'))) %>%
+mutate(country = replace(country, country == 'Congo', 'Democratic Republic of the Congo'),
+country = replace(country, country == 'Gambia', 'The Gambia'),
+country = replace(country, country == 'Macedonia', 'North Macedonia'),
+country = replace(country, country == 'Russia', 'Russian Federation'),
+country = replace(country, country == 'South Korea', 'Republic of Korea'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Taiwan. ROC', 'Taiwan'),
+country = replace(country, country == 'USA', 'United States'),) %>%
+rename("NAME_LONG" = "country") %>%
+group_by(NAME_LONG, food_group) %>%
+summarise(total_co2_gp = sum(co2_emmission),
+total_con_gp = sum(consumption),) %>%
+# mutate(total_co2_prop_animal = total_co2_gp / (total_co2_gp +lag(total_co2_gp)),
+#        total_co2_prop_plant =  1 - lead(total_co2_prop_animal)) %>%
+pivot_wider(names_from = food_group, values_from = total_co2_gp)
+dat <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-18/food_consumption.csv') %>%
+group_by(country) %>%
+mutate(total = sum(co2_emmission),
+proportion = co2_emmission/total) %>%
+mutate(food_category = as.factor(food_category),
+food_group = c(1,1,1,1,1,1,1,0,0,0,0),
+food_group = factor(food_group, labels = c('Plant Protein', 'Animal Protein'))) %>%
+mutate(country = replace(country, country == 'Congo', 'Democratic Republic of the Congo'),
+country = replace(country, country == 'Gambia', 'The Gambia'),
+country = replace(country, country == 'Macedonia', 'North Macedonia'),
+country = replace(country, country == 'Russia', 'Russian Federation'),
+country = replace(country, country == 'South Korea', 'Republic of Korea'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Taiwan. ROC', 'Taiwan'),
+country = replace(country, country == 'USA', 'United States'),) %>%
+rename("NAME_LONG" = "country") %>%
+group_by(NAME_LONG, food_group) %>%
+summarise(total_co2_gp = sum(co2_emmission),
+total_con_gp = sum(consumption),) %>%
+# mutate(total_co2_prop_animal = total_co2_gp / (total_co2_gp +lag(total_co2_gp)),
+#        total_co2_prop_plant =  1 - lead(total_co2_prop_animal)) %>%
+pivot_wider(names_from = food_group, values_from = c(total_co2_gp, total_con_gp)
+}
+ggplot(dat, aes(x = ))+
+dat <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-18/food_consumption.csv') %>%
+group_by(country) %>%
+mutate(total = sum(co2_emmission),
+proportion = co2_emmission/total) %>%
+mutate(food_category = as.factor(food_category),
+food_group = c(1,1,1,1,1,1,1,0,0,0,0),
+food_group = factor(food_group, labels = c('Plant Protein', 'Animal Protein'))) %>%
+mutate(country = replace(country, country == 'Congo', 'Democratic Republic of the Congo'),
+country = replace(country, country == 'Gambia', 'The Gambia'),
+country = replace(country, country == 'Macedonia', 'North Macedonia'),
+country = replace(country, country == 'Russia', 'Russian Federation'),
+country = replace(country, country == 'South Korea', 'Republic of Korea'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Taiwan. ROC', 'Taiwan'),
+country = replace(country, country == 'USA', 'United States'),) %>%
+rename("NAME_LONG" = "country") %>%
+group_by(NAME_LONG, food_group) %>%
+summarise(total_co2_gp = sum(co2_emmission),
+total_con_gp = sum(consumption),) %>%
+# mutate(total_co2_prop_animal = total_co2_gp / (total_co2_gp +lag(total_co2_gp)),
+#        total_co2_prop_plant =  1 - lead(total_co2_prop_animal)) %>%
+pivot_wider(names_from = food_group, values_from = c(total_co2_gp, total_con_gp)
+}
+ggplot(dat, aes(x = ))+
+dat <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-18/food_consumption.csv') %>%
+group_by(country) %>%
+mutate(total = sum(co2_emmission),
+proportion = co2_emmission/total) %>%
+mutate(food_category = as.factor(food_category),
+food_group = c(1,1,1,1,1,1,1,0,0,0,0),
+food_group = factor(food_group, labels = c('Plant Protein', 'Animal Protein'))) %>%
+mutate(country = replace(country, country == 'Congo', 'Democratic Republic of the Congo'),
+country = replace(country, country == 'Gambia', 'The Gambia'),
+country = replace(country, country == 'Macedonia', 'North Macedonia'),
+country = replace(country, country == 'Russia', 'Russian Federation'),
+country = replace(country, country == 'South Korea', 'Republic of Korea'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Taiwan. ROC', 'Taiwan'),
+country = replace(country, country == 'USA', 'United States'),) %>%
+rename("NAME_LONG" = "country") %>%
+group_by(NAME_LONG, food_group) %>%
+summarise(total_co2_gp = sum(co2_emmission),
+total_con_gp = sum(consumption),) %>%
+# mutate(total_co2_prop_animal = total_co2_gp / (total_co2_gp +lag(total_co2_gp)),
+#        total_co2_prop_plant =  1 - lead(total_co2_prop_animal)) %>%
+pivot_wider(names_from = food_group, values_from = c(total_co2_gp, total_con_gp)
+}
+ggplot(dat, aes(x = ))+
+dat <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-18/food_consumption.csv') %>%
+group_by(country) %>%
+mutate(total = sum(co2_emmission),
+proportion = co2_emmission/total) %>%
+mutate(food_category = as.factor(food_category),
+food_group = c(1,1,1,1,1,1,1,0,0,0,0),
+food_group = factor(food_group, labels = c('Plant Protein', 'Animal Protein'))) %>%
+mutate(country = replace(country, country == 'Congo', 'Democratic Republic of the Congo'),
+country = replace(country, country == 'Gambia', 'The Gambia'),
+country = replace(country, country == 'Macedonia', 'North Macedonia'),
+country = replace(country, country == 'Russia', 'Russian Federation'),
+country = replace(country, country == 'South Korea', 'Republic of Korea'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Taiwan. ROC', 'Taiwan'),
+country = replace(country, country == 'USA', 'United States'),) %>%
+rename("NAME_LONG" = "country") %>%
+group_by(NAME_LONG, food_group) %>%
+summarise(total_co2_gp = sum(co2_emmission),
+total_con_gp = sum(consumption),) %>%
+# mutate(total_co2_prop_animal = total_co2_gp / (total_co2_gp +lag(total_co2_gp)),
+#        total_co2_prop_plant =  1 - lead(total_co2_prop_animal)) %>%
+pivot_wider(names_from = food_group, values_from = c(total_co2_gp, total_con_gp)
+}
+ggplot(dat, aes(x = ))+
+dat <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-18/food_consumption.csv') %>%
+group_by(country) %>%
+mutate(total = sum(co2_emmission),
+proportion = co2_emmission/total) %>%
+mutate(food_category = as.factor(food_category),
+food_group = c(1,1,1,1,1,1,1,0,0,0,0),
+food_group = factor(food_group, labels = c('Plant Protein', 'Animal Protein'))) %>%
+mutate(country = replace(country, country == 'Congo', 'Democratic Republic of the Congo'),
+country = replace(country, country == 'Gambia', 'The Gambia'),
+country = replace(country, country == 'Macedonia', 'North Macedonia'),
+country = replace(country, country == 'Russia', 'Russian Federation'),
+country = replace(country, country == 'South Korea', 'Republic of Korea'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Taiwan. ROC', 'Taiwan'),
+country = replace(country, country == 'USA', 'United States'),) %>%
+rename("NAME_LONG" = "country") %>%
+group_by(NAME_LONG, food_group) %>%
+summarise(total_co2_gp = sum(co2_emmission),
+total_con_gp = sum(consumption),) %>%
+# mutate(total_co2_prop_animal = total_co2_gp / (total_co2_gp +lag(total_co2_gp)),
+#        total_co2_prop_plant =  1 - lead(total_co2_prop_animal)) %>%
+pivot_wider(names_from = food_group, values_from = c(total_co2_gp, total_con_gp))
+dat <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-18/food_consumption.csv') %>%
+group_by(country) %>%
+mutate(total = sum(co2_emmission),
+proportion = co2_emmission/total) %>%
+mutate(food_category = as.factor(food_category),
+food_group = c(1,1,1,1,1,1,1,0,0,0,0),
+food_group = factor(food_group, labels = c('Plant Protein', 'Animal Protein'))) %>%
+mutate(country = replace(country, country == 'Congo', 'Democratic Republic of the Congo'),
+country = replace(country, country == 'Gambia', 'The Gambia'),
+country = replace(country, country == 'Macedonia', 'North Macedonia'),
+country = replace(country, country == 'Russia', 'Russian Federation'),
+country = replace(country, country == 'South Korea', 'Republic of Korea'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Taiwan. ROC', 'Taiwan'),
+country = replace(country, country == 'USA', 'United States'),) %>%
+rename("NAME_LONG" = "country") %>%
+group_by(NAME_LONG, food_group) %>%
+summarise(total_co2_gp = sum(co2_emmission),
+total_con_gp = sum(consumption),) #%>%
+dat <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-18/food_consumption.csv') %>%
+group_by(country) %>%
+mutate(total = sum(co2_emmission),
+proportion = co2_emmission/total) %>%
+mutate(food_category = as.factor(food_category),
+food_group = c(1,1,1,1,1,1,1,0,0,0,0),
+food_group = factor(food_group, labels = c('Plant Protein', 'Animal Protein'))) %>%
+mutate(country = replace(country, country == 'Congo', 'Democratic Republic of the Congo'),
+country = replace(country, country == 'Gambia', 'The Gambia'),
+country = replace(country, country == 'Macedonia', 'North Macedonia'),
+country = replace(country, country == 'Russia', 'Russian Federation'),
+country = replace(country, country == 'South Korea', 'Republic of Korea'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Taiwan. ROC', 'Taiwan'),
+country = replace(country, country == 'USA', 'United States'),) %>%
+rename("NAME_LONG" = "country") %>%
+group_by(NAME_LONG, food_group) %>%
+summarise(total_co2_gp = sum(co2_emmission),
+total_con_gp = sum(consumption),) #%>%
+dat <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-18/food_consumption.csv') %>%
+group_by(country) %>%
+mutate(total = sum(co2_emmission),
+proportion = co2_emmission/total) %>%
+mutate(food_category = as.factor(food_category),
+food_group = c(1,1,1,1,1,1,1,0,0,0,0),
+food_group = factor(food_group, labels = c('Plant Protein', 'Animal Protein'))) %>%
+mutate(country = replace(country, country == 'Congo', 'Democratic Republic of the Congo'),
+country = replace(country, country == 'Gambia', 'The Gambia'),
+country = replace(country, country == 'Macedonia', 'North Macedonia'),
+country = replace(country, country == 'Russia', 'Russian Federation'),
+country = replace(country, country == 'South Korea', 'Republic of Korea'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Taiwan. ROC', 'Taiwan'),
+country = replace(country, country == 'USA', 'United States'),) %>%
+rename("NAME_LONG" = "country") %>%
+group_by(NAME_LONG, food_group) #%>%
+dat <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-18/food_consumption.csv') %>%
+group_by(country) %>%
+mutate(total = sum(co2_emmission),
+proportion = co2_emmission/total) %>%
+mutate(food_category = as.factor(food_category),
+food_group = c(1,1,1,1,1,1,1,0,0,0,0),
+food_group = factor(food_group, labels = c('Plant Protein', 'Animal Protein'))) %>%
+mutate(country = replace(country, country == 'Congo', 'Democratic Republic of the Congo'),
+country = replace(country, country == 'Gambia', 'The Gambia'),
+country = replace(country, country == 'Macedonia', 'North Macedonia'),
+country = replace(country, country == 'Russia', 'Russian Federation'),
+country = replace(country, country == 'South Korea', 'Republic of Korea'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Taiwan. ROC', 'Taiwan'),
+country = replace(country, country == 'USA', 'United States'),) %>%
+rename("NAME_LONG" = "country") %>%
+group_by(NAME_LONG, food_group) %>%
+summarise(total_co2_gp = sum(co2_emmission),
+total_con_gp = sum(consumption),) %>%
+# mutate(total_co2_prop_animal = total_co2_gp / (total_co2_gp +lag(total_co2_gp)),
+#        total_co2_prop_plant =  1 - lead(total_co2_prop_animal)) %>%
+pivot_wider(names_from = food_group, values_from = c(total_co2_gp, total_con_gp))
+dat <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-18/food_consumption.csv') %>%
+group_by(country) %>%
+mutate(total = sum(co2_emmission),
+proportion = co2_emmission/total) %>%
+mutate(food_category = as.factor(food_category),
+food_group = c(1,1,1,1,1,1,1,0,0,0,0),
+food_group = factor(food_group, labels = c('Plant', 'Animal'))) %>%
+mutate(country = replace(country, country == 'Congo', 'Democratic Republic of the Congo'),
+country = replace(country, country == 'Gambia', 'The Gambia'),
+country = replace(country, country == 'Macedonia', 'North Macedonia'),
+country = replace(country, country == 'Russia', 'Russian Federation'),
+country = replace(country, country == 'South Korea', 'Republic of Korea'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Taiwan. ROC', 'Taiwan'),
+country = replace(country, country == 'USA', 'United States'),) %>%
+rename("NAME_LONG" = "country") %>%
+group_by(NAME_LONG, food_group) %>%
+summarise(total_co2_gp = sum(co2_emmission),
+total_con_gp = sum(consumption),) %>%
+# mutate(total_co2_prop_animal = total_co2_gp / (total_co2_gp +lag(total_co2_gp)),
+#        total_co2_prop_plant =  1 - lead(total_co2_prop_animal)) %>%
+pivot_wider(names_from = food_group, values_from = c(total_co2_gp, total_con_gp))
+ggplot(dat, aes(x = total_con_gp_Plant, y = total_con_gp_Animal ))+
+geom_point()
+dat <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-18/food_consumption.csv') %>%
+group_by(country) %>%
+mutate(total = sum(co2_emmission),
+proportion = co2_emmission/total) %>%
+mutate(food_category = as.factor(food_category),
+food_group = c(1,1,1,1,1,1,1,0,0,0,0),
+food_group = factor(food_group, labels = c('Plant', 'Animal'))) %>%
+mutate(country = replace(country, country == 'Congo', 'Democratic Republic of the Congo'),
+country = replace(country, country == 'Gambia', 'The Gambia'),
+country = replace(country, country == 'Macedonia', 'North Macedonia'),
+country = replace(country, country == 'Russia', 'Russian Federation'),
+country = replace(country, country == 'South Korea', 'Republic of Korea'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Taiwan. ROC', 'Taiwan'),
+country = replace(country, country == 'USA', 'United States'),) %>%
+rename("NAME_LONG" = "country") %>%
+group_by(NAME_LONG, food_group) %>%
+summarise(total_co2_gp = sum(co2_emmission),
+total_con_gp = sum(consumption),) %>%
+# mutate(total_co2_prop_animal = total_co2_gp / (total_co2_gp +lag(total_co2_gp)),
+#        total_co2_prop_plant =  1 - lead(total_co2_prop_animal)) %>%
+pivot_wider(names_from = food_group, values_from = c(total_co2_gp, total_con_gp)) %>%
+mutate(prop_animal = total_co2_gp_Animal / total_co2_gp_Animal + total_co2_gp_Plant)
+get_dat <- function(){
+dat <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-18/food_consumption.csv') %>%
+group_by(country) %>%
+mutate(total = sum(co2_emmission),
+proportion = co2_emmission/total) %>%
+mutate(food_category = as.factor(food_category),
+food_group = c(1,1,1,1,1,1,1,0,0,0,0),
+food_group = factor(food_group, labels = c('Plant', 'Animal'))) %>%
+mutate(country = replace(country, country == 'Congo', 'Democratic Republic of the Congo'),
+country = replace(country, country == 'Gambia', 'The Gambia'),
+country = replace(country, country == 'Macedonia', 'North Macedonia'),
+country = replace(country, country == 'Russia', 'Russian Federation'),
+country = replace(country, country == 'South Korea', 'Republic of Korea'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Taiwan. ROC', 'Taiwan'),
+country = replace(country, country == 'USA', 'United States'),) %>%
+rename("NAME_LONG" = "country") %>%
+group_by(NAME_LONG, food_group) %>%
+summarise(total_co2_gp = sum(co2_emmission),
+total_con_gp = sum(consumption),) %>%
+# mutate(total_co2_prop_animal = total_co2_gp / (total_co2_gp +lag(total_co2_gp)),
+#        total_co2_prop_plant =  1 - lead(total_co2_prop_animal)) %>%
+pivot_wider(names_from = food_group, values_from = c(total_co2_gp, total_con_gp)) %>%
+mutate(prop_animal = total_co2_gp_Animal / total_co2_gp_Animal + total_co2_gp_Plant)
+}
+dat <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-18/food_consumption.csv') %>%
+group_by(country) %>%
+mutate(total = sum(co2_emmission),
+proportion = co2_emmission/total) %>%
+mutate(food_category = as.factor(food_category),
+food_group = c(1,1,1,1,1,1,1,0,0,0,0),
+food_group = factor(food_group, labels = c('Plant', 'Animal'))) %>%
+mutate(country = replace(country, country == 'Congo', 'Democratic Republic of the Congo'),
+country = replace(country, country == 'Gambia', 'The Gambia'),
+country = replace(country, country == 'Macedonia', 'North Macedonia'),
+country = replace(country, country == 'Russia', 'Russian Federation'),
+country = replace(country, country == 'South Korea', 'Republic of Korea'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Taiwan. ROC', 'Taiwan'),
+country = replace(country, country == 'USA', 'United States'),) %>%
+rename("NAME_LONG" = "country") %>%
+group_by(NAME_LONG, food_group) %>%
+summarise(total_co2_gp = sum(co2_emmission),
+total_con_gp = sum(consumption),) %>%
+# mutate(total_co2_prop_animal = total_co2_gp / (total_co2_gp +lag(total_co2_gp)),
+#        total_co2_prop_plant =  1 - lead(total_co2_prop_animal)) %>%
+pivot_wider(names_from = food_group, values_from = c(total_co2_gp, total_con_gp)) %>%
+mutate(prop_animal = total_co2_gp_Animal / (total_co2_gp_Animal + total_co2_gp_Plant))
+ggplot(dat, aes(x = total_con_gp_Plant, y = total_con_gp_Animal ))+
+geom_point(aes(size = prop_animal))
+ggplot(dat, aes(x = total_con_gp_Plant, y = total_con_gp_Animal ))+
+geom_point(aes(size = prop_animal, alpha = 0.5))
+ggplot(dat, aes(x = total_con_gp_Plant, y = total_con_gp_Animal ))+
+geom_point(aes(size = prop_animal, alpha = 0.5))+
+geom_label_repel()
+ggplot(dat, aes(x = total_con_gp_Plant, y = total_con_gp_Animal ))+
+geom_point(aes(size = prop_animal, alpha = 0.5))+
+geom_label()
+ggplot(dat, aes(x = total_con_gp_Plant, y = total_con_gp_Animal ))+
+geom_point(aes(size = prop_animal, alpha = 0.5))+
+geom_label(label = NAME_LONG)
+ggplot(dat, aes(x = total_con_gp_Plant, y = total_con_gp_Animal ))+
+geom_point(aes(size = prop_animal, alpha = 0.5))+
+geom_label(label = 'NAME_LONG')
+ggplot(dat, aes(x = total_con_gp_Plant, y = total_con_gp_Animal ))+
+geom_point(aes(size = prop_animal, alpha = 0.5))+
+geom_label(aes(label = 'NAME_LONG'))
+geom_label(aes(label = NAME_LONG)
+ggplot(dat, aes(x = total_con_gp_Plant, y = total_con_gp_Animal ))+
+ggplot(dat, aes(x = total_con_gp_Plant, y = total_con_gp_Animal ))+
+geom_point(aes(size = prop_animal, alpha = 0.5))+
+geom_label(aes(label = NAME_LONG))
+ggplot(dat, aes(x = total_con_gp_Plant, y = total_con_gp_Animal ))+
+geom_point(aes(size = prop_animal, alpha = 0.5))+
+geom_text_repel(aes(label = NAME_LONG))
+library(ggrepel)
+ggplot(dat, aes(x = total_con_gp_Plant, y = total_con_gp_Animal ))+
+geom_point(aes(size = prop_animal, alpha = 0.5))+
+geom_text_repel(aes(label = NAME_LONG))
+ggplot(dat, aes(x = total_con_gp_Plant, y = total_con_gp_Animal ))+
+geom_point(aes(fill = prop_animal, alpha = 0.5))+
+geom_text_repel(aes(label = NAME_LONG))
+ggplot(dat, aes(x = total_con_gp_Plant, y = total_con_gp_Animal ))+
+geom_point(aes(colour = prop_animal, alpha = 0.5))+
+geom_text_repel(aes(label = NAME_LONG))
+ggplot(dat, aes(x = total_con_gp_Plant, y = total_con_gp_Animal ))+
+geom_point(aes(colour = prop_animal, alpha = 0.5))+
+geom_text_repel(aes(label = NAME_LONG))+
+scale_fill_viridis_b()
+dat <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-18/food_consumption.csv') %>%
+group_by(country) %>%
+mutate(total = sum(co2_emmission),
+proportion = co2_emmission/total) %>%
+mutate(food_category = as.factor(food_category),
+food_group = c(1,1,1,1,1,1,1,0,0,0,0),
+food_group = factor(food_group, labels = c('Plant', 'Animal'))) %>%
+mutate(country = replace(country, country == 'Congo', 'Democratic Republic of the Congo'),
+country = replace(country, country == 'Gambia', 'The Gambia'),
+country = replace(country, country == 'Macedonia', 'North Macedonia'),
+country = replace(country, country == 'Russia', 'Russian Federation'),
+country = replace(country, country == 'South Korea', 'Republic of Korea'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Swaziland', 'Kingdom of eSwatini'),
+country = replace(country, country == 'Taiwan. ROC', 'Taiwan'),
+country = replace(country, country == 'USA', 'United States'),) %>%
+rename("NAME_LONG" = "country") %>%
+group_by(NAME_LONG, food_group) %>%
+summarise(total_co2_gp = sum(co2_emmission),
+total_con_gp = sum(consumption),) %>%
+# mutate(total_co2_prop_animal = total_co2_gp / (total_co2_gp +lag(total_co2_gp)),
+#        total_co2_prop_plant =  1 - lead(total_co2_prop_animal)) %>%
+pivot_wider(names_from = food_group, values_from = c(total_co2_gp, total_con_gp)) %>%
+mutate(prop_plant = 1-(total_co2_gp_Animal / (total_co2_gp_Animal + total_co2_gp_Plant)))
+library(ggrepel)
+ggplot(dat, aes(x = total_con_gp_Plant, y = total_con_gp_Animal ))+
+geom_point(aes(colour = prop_animal, alpha = 0.5))+
+geom_text_repel(aes(label = NAME_LONG))+
+scale_fill_viridis_b()
+ggplot(dat, aes(x = total_con_gp_Plant, y = total_con_gp_Animal ))+
+geom_point(aes(colour = prop_plant, alpha = 0.5))+
+geom_text_repel(aes(label = NAME_LONG))+
+scale_fill_viridis_b()
+shiny::runApp('food_consumption')
+dat <-readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-02-18/food_consumption.csv')
+runApp('food_consumption')
+shiny::runApp('food_consumption')
+runApp('food_consumption')
+runApp('food_consumption')
+runApp('food_consumption')
+runApp('food_consumption')
+runApp('food_consumption')
+runApp('food_consumption')
+runApp('food_consumption')
+shiny::runApp('food_consumption')
+shiny::runApp('food_consumption')
+runApp('food_consumption')
+shiny::runApp()
