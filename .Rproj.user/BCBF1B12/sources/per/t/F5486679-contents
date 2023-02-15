@@ -7,15 +7,12 @@ author:
 description: 
 date: "`r Sys.Date()`"
 output: 
-  
   pdf_document: 
     fig_width: 7
     fig_height: 6
     fig_caption: yes
     toc: yes
     number_sections: yes
-  documentclass: article
-  classoption: a4paper
 ---
 
 ```{r setup, include=FALSE}
@@ -53,7 +50,7 @@ The graphs can all be viewed on [this **shiny app**](https://seosamh.shinyapps.i
 
 ## Introduction
 
-The data for this analysis is sourced from [Tidy Tuesday's Github](https://github.com/rfordatascience/tidytuesday/tree/master/data/2020/2020-02-18) and is an webscrape from [nu3](https://www.nu3.de/blogs/nutrition/food-carbon-footprint-index-2018). 'nu3' is a German nutrition company that sells fitness, food and health products including a vegan range. They have created a table which consolidates information from the FAO (Food and Agriculture Organization of the United Nations) relating to consumption of selected foodstuffs as well as median global emissions of CO2 equivalent per KG eaten. The data was collated in 2018 and most of the data is from 2013. There are limitations to this data set as it doesn't take into account different countries emissions of CO2*e*, the nutritional benefits of the foodstuff and it uses a selection of foodstuffs without justifying their inclusion. 
+The data for this analysis is sourced from [Tidy Tuesday's Github](https://github.com/rfordatascience/tidytuesday/tree/master/data/2020/2020-02-18)(GitHub) and is an webscrape from [nu3](https://www.nu3.de/blogs/nutrition/food-carbon-footprint-index-2018). 'nu3' is a German nutrition company that sells fitness, food and health products including a vegan range. They have created a table which consolidates information from the FAO (Food and Agriculture Organization of the United Nations) relating to consumption of selected foodstuffs as well as median global emissions of CO2 equivalent per KG eaten. The data was collated in 2018 and most of the data is from 2013. There are limitations to this data set as it doesn't take into account different countries emissions of CO2, the nutritional benefits of the foodstuff and it uses a selection of foodstuffs without justifying their inclusion. 
 
 The data from this webpage was scraped, tidied and exported into a csv file with 1430 rows of data, comprising of 130 countries and 11 food categories and has the following variables.
 
@@ -65,42 +62,50 @@ The data from this webpage was scraped, tidied and exported into a csv file with
 |co2_emmission |double    | Co2 Emission (Kg CO2/person/year) |
 
 
-## What variation is there is consumption of food categories?
+## What variation is there in consumption of food categories?
 
 
 ```{r raincloud, fig.cap="Raincloud plot of Consumption (KG) of food categories"}
 
   amounts <- dat %>% 
     # Create ordered factors for food category by median consumption
-    mutate(food_category = fct_reorder(food_category, consumption, .fun='median')) 
-  
+    mutate(food_category = fct_reorder(food_category, consumption, .fun='median')) %>% 
+  mutate(food_group = if_else(food_category %in% c("Wheat and Wheat Products", "Rice", "Soybeans", "Nuts inc. Peanut Butter"), "Plant Protein", "Animal Protein"))
+                  
+dat1<- amounts %>%
+                       group_by(food_category) %>%
+                       summarise(max = max(consumption),
+                                group = first(food_group))
   
   ggplot(amounts, aes(x = food_category, y = consumption))+
     # Add the raincloud part of plot
-    ggdist::stat_halfeye( fill = cbbPalette[8],
-                          adjust = 0.5, 
+    ggdist::stat_halfeye(aes(fill = food_group),
+                         adjust = 0.5, 
                           width = .6, 
                           .width = 0, 
                           justification = -.2, 
                           point_colour = NA,
                           normalize = 'groups', 
-    )+# add boxplot to show distribution
+    )+
+    scale_fill_manual(values = c("Plant Protein" = cbbPalette[2],
+                                "Animal Protein"=cbbPalette[6])) +
+    # add boxplot to show distribution
     geom_boxplot( width = 0.15,
                   outlier.colour = NA,
                   alpha = 0.5)+
     # add 'rain' 
-    stat_dots(alpha = 1,
-              fill = cbbPalette[1],
+    stat_dots(fill = cbbPalette[1],
               dotsize = 1,
               side = 'left')+
     # flip so that rain falls down
     coord_flip()+
     theme_minimal(base_size = 15)+
     labs(title = 'Consumption of food categories by country',
-         subtitle = "<span style='color:#D55E00'>Maximum amount (KG)</span>",
+         subtitle = "<span style='color:#CC79A7'>Maximum amount (KG)</span>",
          x = NULL,
          y = ' Consumption per capita (KG)') +
-    theme(legend.position = 'none', # remove legend
+    theme(legend.position ='bottom',
+          legend.title = element_blank(),# remove legend
           plot.title = element_text(),
           plot.subtitle = element_markdown(hjust =.4), # set as markdown to allow colour change
           axis.text.y = element_text(vjust = -1),
@@ -108,7 +113,7 @@ The data from this webpage was scraped, tidied and exported into a csv file with
           panel.grid.minor.x = element_blank())+ 
     scale_y_continuous(breaks = seq(0, 450, by = 50))+ # set y axis breaks
     # add label and arrow for Highest value: Finland
-    geom_curve(aes(x = 7.5, y = 355, xend = 9.8, yend = 421), 
+    geom_curve(aes(x = 7.5, y = 355, xend = 10, yend = 421), 
                colour = cbbPalette[1], 
                size=1,
                curvature = 0.4,
@@ -122,14 +127,15 @@ The data from this webpage was scraped, tidied and exported into a csv file with
                lineheight = 0.8,
                label.size = NA,
                colour = cbbPalette[7]) +
-    # label all the highest figures by category
+     # label all the highest figures by category
     geom_label_repel(data = amounts %>%
                        group_by(food_category) %>%
                        summarise(max = max(consumption)),
                      aes(x = food_category, y = max,
                          label = max),
-                     colour = cbbPalette[7], label.size = NA,
-                     min.segment.length = 0)
+                     colour = cbbPalette[8], label.size = NA,
+                     min.segment.length = 0) # ensure every label has a line to it
+   
 ```
 
 \
@@ -138,7 +144,6 @@ The first question to ask from the data is what is the distribution of consumpti
 As well as the differences in median and maximum values there is a big range in consumption even among categories that have similar median values such as Pork and Eggs. 
 
 With the worlds increasing knowledge of the need to reduce our collective carbon footprint does the carbon footprint of a food category impact its consumption or is it not impacted by carbon footprint?
-## Does consumption affect carbon footprint
 
 ##  Do different food categories have different carbon footprints?
 
@@ -226,14 +231,14 @@ ggplot( aes(x = total_con_gp_Animal, y = total_con_gp_Plant ))+
 
 \
 
-Figure 3 explores whether a countries consumption of animal vs plant protein affects its overall carbon footprint. We can see that the largest bubbles appear to the right of the plot with high animal protein consumption. Although it is worth noting the pattern that with animal protein consumption increasing, plant protein generally increase too but the converse isn't true as there are many countries with a high level of plant protein consumption that don't have a high consumption of animal protein.
+Figure 3 explores whether a countries consumption of animal vs plant protein affects its overall carbon footprint. We can see that the largest bubbles appear to the right of the plot with high animal protein consumption. Although it is worth noting the pattern that as animal protein consumption increases, plant protein generally increases too, but the converse isn't true. There are many countries with a high level of plant protein consumption that don't have a high consumption of animal protein.
 
-Another interesting point from this graph is that for the majority of countries the majority of their emissions come from animal products as the area of their point is mainly attributable to non-plant CO2 emissions. Combining the information we have learned from figure 1 and figure 2 we can suggest that this is the effect of high consumption of animal proteins as well as their generally higher carbon footprint. We can explore this relationship further in the interactive version of this graph clicking on each data point gives the country name and shows a breakdown of its consumption and CO2 emissions as seen in Figure 4. 
+Another interesting point from this graph is that for the majority of countries the majority of their emissions come from animal products as the area of their point is mainly attributable to non-plant CO2 emissions. We can begin to explain this by using what we've learnt from figure 1 and 2, namely that animal products are consumed in large amounts and have a high carbon footprint. We can explore this relationship further in the interactive version of this graph as clicking on each data point gives the country's name and shows a breakdown of its consumption and CO2 emissions as seen in Figure 4. 
 
 ## What are different countries doing?
 
 
-```{r bar chart, fig.cap = "Screenshot of interactive bar chart allowing user inputs of country, fixed axis and bar sorting criteria", out.width="100%"}
+```{r bar chart, fig.cap = "Screenshot of an interactive bar chart allowing user inputs of country, whether to fix the axis and bar sorting criteria", out.width="100%"}
 
 knitr::include_graphics(here::here("images/Bar Chart.png"))
 
@@ -242,7 +247,7 @@ knitr::include_graphics(here::here("images/Bar Chart.png"))
 \
 Figure 4 shows a bar chart which can either be accessed by clicking on a point in Figure 3 or by selecting a country from a dropdown menu as shown in the figure. It includes a tick box option to fix the x axis at 0 - 1750KG in order to facilitate comparison between countries but removing this option allows for the finer details of countries with smaller consumption to be better visualised. Additionally we can sort the bars alphabetically (to allow for easy comparison) or by consumption or emissions. These user inputs are included in the plot title and subtitle.
 
-## Is there a global pattern to emissions from food
+## Is there a global pattern to emissions from food?
 
 ```{r combined map, fig.cap= "Static map of CO2 emissions and wealth", results = "hide"}
 co2 <- dat %>% 
@@ -308,7 +313,7 @@ tmap_arrange(c, w, nrow = 2, sync = TRUE)
 ```
 
 \
-In order to determine if there is a global pattern to CO2 emissions per person this information was plotted on a map (figure 5). This shows an interesting pattern whereby the lowest carbon footprint appears to be in Africa, Asia and Eastern South America with the highest emissions coming from Europe and North America. Beneath this map is included a measure of wealth of countries and this appears to follow a very similar pattern apart from Argentina which has a far higher level of emissions than other countries of a similar level of wealth.
+In order to determine if there is a global pattern to CO2 emissions per person this information was plotted on a map (figure 5). This shows an interesting pattern whereby the lowest carbon footprint appears to be in Africa, Asia and Eastern South America with the highest emissions coming from Europe and North America. Beneath this map is included a measure of wealth of countries and this appears to follow a very similar pattern apart from notably Argentina which has a far higher level of emissions than other countries of a similar level of wealth, which when we look at a breakdown of its consumption as in figure 4 it is because of its very high beef consumption.
 
 
 ## How could we improve?
@@ -348,11 +353,11 @@ co2_dat <- dat %>%
   # Create plot object
   
   ggplot(df, aes(x =x, y = y))+
-    geom_point(aes(size = value), colour = cbbPalette[c(2,6,2)])+ # set colours using palatte
+    geom_point(aes(size = value), colour = cbbPalette[c(2,6,2)])+ # set colours using palette
     scale_size_area(max_size = 120) + # increase size of points
-    theme_void(base_size = 20)+ # remove all graoh junk and increase text size
+    theme_void(base_size = 20)+ # remove all graph junk and increase text size
     theme(legend.position = "none")+ # remove legend
-    xlim(0,2.5)+ # set plot limits to centre dots
+    xlim(0,2.5)+ # set plot limits to center dots
     ylim(0,5)+
     geom_text(aes(label = paste0( scales::comma(value)," KG\n of CO2")), # add formatted labels to dots
               colour = 'white')+
@@ -414,7 +419,7 @@ knitr::include_graphics(here::here("images/Bad graph - 2.jpg"))
 ```
 
 \
-This visualisation is generally quite difficult to make any inferences from as it is very cluttered. The points outlined below make the message of the graph very difficult to interpret. As a standalone graph it lacks alot of key information, such as a title (annotation D), although an equivalent to this is included in the figure caption. Of more significance is the lack of a legend title (annotation F) as although we can infer that this is probably LPS concentration from the figure title it is possible that it could relate to something else. The legend (annotation F) also suffers from a poor choice of colour scale as although it is consistently used across x axis categories the colours are so similar it makes comparing the same concentration across categories very difficult. Either direct labeling of the points or a better choice of colour scale would have made this much better. The x axis is missing a title (annotation C) and so although we can tell there are different categories it isn't clear what these are categories of. The y axis of this graph (annotation A) although labeled, has two major flaws as it is split and so jumps from 2 to 80 and has vastly different scales for the higher numbers. This makes interpretation very difficult and is misleading as to the magnitude of differences between groups. Finally the labeling of P values (annotation B) adds alot of clutter to the graph and a more minimal way of labeling such as letters to show significance levels would improve this graphs readability.
+Figure 8 is quite difficult to make any inferences from as it is very cluttered and the message of the graph is very difficult to discern. It lacks alot of key information, such as a title (D), although an equivalent to this is included in the figure caption. Of more significance is the lack of a legend title (F) as although we can infer that this is probably LPS concentration from the figure information it is possible that it could relate to something else. The legend (F) also suffers from a poor choice of colour scale as although it is consistently used across x axis categories the colours are so similar it makes comparing the same concentration across categories very difficult. Either direct labeling of the points or a better choice of colour scale would have made this much better. The x axis is missing a title (C) and so although we can tell there are different categories it isn't clear what these are categories of. The y axis of this graph (A) although labeled, has two major flaws as it is split and so jumps from 2 to 80 and then has a vastly different scale for the higher numbers. This makes interpretation very difficult and is misleading as to the magnitude of differences between groups. Finally the labeling of P values (B) adds alot of clutter to the graph and a more minimal way of labeling such as letters to show significance levels would improve this graphs readability.
 
 ## Good Graph
 
@@ -423,11 +428,19 @@ knitr::include_graphics(here::here("images/Good graph.jpg"))
 ```
 
 \
-Figure 9 manages to convey the information required in a efficient manor although the purpose of the graph isn't clear as it is lacking a title but this information is included in the figure caption. The choice of a stacked bar is appropriate as it is showing the prevalence of categories that will add upto 100% The axis on this graph are very clear with the x axis (annotation E) having good sensible breaks and the y axis has good groupings of variables for comparison (annotation A) and the rotation of the graph allows of y axis categories (annotation B) to be easily read. The colour choice of the stacked bars (annotation C) allows for clear differentiation between categories. With the direct labeling (annotation D) of the sections of the bar allow for the exact size of each segment to be read without relying on the reader inference as this can be difficult to judge with a stacked bar chart. I especially like to attention to detail with the changing of colour of the text (annotation F) depending on the background to ensure the text remains clear as the consistent approach to decimalisation. 
+Figure 9 manages to convey the information required in a efficient manor although the purpose of the graph isn't clear as it is lacking a title but this information is included in the figure caption. The choice of a stacked bar is appropriate as it is showing the prevalence of categories that will add upto 100% The axis on this graph are very clear with the x axis (E) having good sensible breaks and the y axis has good groupings of variables for comparison (A) and the rotation of the graph allows of y axis categories (B) to be easily read. The colour choice of the stacked bars (C) allows for clear differentiation between categories. With the direct labeling (D) of the sections of the bar allow for the exact size of each segment to be read without relying on the reader inference as this can be difficult to judge with a stacked bar chart. I especially like to attention to detail with the changing of colour of the text (F) depending on the background to ensure the text remains clear.
+
+
+
+
+
+
 
 # References
 
 Baker, P., Smith, J.P., Garde, A., Grummer-Strawn, L.M., Wood, B., Sen, G., Hastings, G., Pérez-Escamilla, R., Ling, C.Y., Rollins, N. and McCoy, D. (2023). The political economy of infant and young child feeding: confronting corporate power, overcoming structural barriers, and accelerating progress. The Lancet, [online] 401(10375), pp.503–524. doi:https://doi.org/10.1016/S0140-6736(22)01933-X.
+
+GitHub. (n.d.). tidytuesday/data/2020/2020-02-18 at master · rfordatascience/tidytuesday. [online] Available at: https://github.com/rfordatascience/tidytuesday/tree/master/data/2020/2020-02-18 [Accessed 15 Feb. 2023].
 
 Xie, W., Xue, Y., Song, X., Zhang, H., Chang, G. and Shen, X. (2022). Forkhead box protein A2 alleviates toll-like receptor 4-mediated inflammation, endoplasmic reticulum stress, autophagy, and apoptosis induced by lipopolysaccharide in bovine hepatocytes. Journal of Dairy Science. [online] doi:https://doi.org/10.3168/jds.2022-22252.
 
